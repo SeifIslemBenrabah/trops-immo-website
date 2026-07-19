@@ -1,0 +1,11 @@
+# Single-page app fallback: rewrite any request that doesn't match a real
+# file or directory to index.html so React Router can handle the route
+# client-side (needed on Apache/cPanel hosts — Netlify uses public/_redirects
+# instead, which this file has no effect on).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

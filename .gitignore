@@ -1,0 +1,13 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Legacy scaffolding / local-only reference material, not part of the app
+assets/.aistudio/
+design-screenshots/
+metadata.json

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Update the domain below to the real production domain before deploying
+  (see src/lib/siteConfig.ts, which drives canonical/OG tags at runtime).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.tropsimmo.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets</loc><priority>0.9</priority></url>
+  <url><loc>https://www.tropsimmo.com/a-propos</loc><priority>0.6</priority></url>
+  <url><loc>https://www.tropsimmo.com/contact</loc><priority>0.6</priority></url>
+
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo</loc><priority>0.9</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/f3-a</loc><priority>0.5</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/f3-b</loc><priority>0.5</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/f4</loc><priority>0.5</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/f5</loc><priority>0.5</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/duplex-a-f5</loc><priority>0.5</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/duplex-b-f6</loc><priority>0.5</priority></url>
+  <url><loc>https://www.tropsimmo.com/projets/residence-trops-immo/duplex-c-f5</loc><priority>0.5</priority></url>
+</urlset>

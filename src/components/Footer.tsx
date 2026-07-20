@@ -63,7 +63,7 @@ export default function Footer() {
                   TROPS IMMO
                 </span>
                 <span className="block text-[8px] uppercase tracking-[0.3em] font-medium text-accent">
-                  Haute Couture Immobilier
+                  Promoteur Immobilier
                 </span>
               </div>
             </div>

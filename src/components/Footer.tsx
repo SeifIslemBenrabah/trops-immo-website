@@ -206,7 +206,7 @@ export default function Footer() {
             © {new Date().getFullYear()} TROPS IMMO. Tous droits réservés.
           </p>
           <div className="flex gap-6">
-            <span className="text-accent font-semibold tracking-wider">Haute Couture Immobilière</span>
+            <span className="text-accent font-semibold tracking-wider">Promoteur Immobilier</span>
           </div>
         </div>
       </div>

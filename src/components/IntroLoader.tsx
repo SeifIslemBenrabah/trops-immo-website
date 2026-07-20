@@ -120,7 +120,7 @@ export default function IntroLoader({ onExitStart, onComplete }: IntroLoaderProp
                 transition: { duration: 0.9, delay: 1.65, ease: "easeOut" },
               }}
             >
-              HAUTE COUTURE IMMOBILIÈRE
+              PROMOTEUR IMMOBILIER
             </motion.p>
 
             {/* Aesthetic bottom divider line, drawing outward from the center */}

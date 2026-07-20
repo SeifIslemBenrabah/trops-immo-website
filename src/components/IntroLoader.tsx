@@ -7,6 +7,14 @@ interface IntroLoaderProps {
   onComplete: () => void;
 }
 
+// Number of vertical curtain strips the background splits into on exit, and
+// the delay between each one starting its slide-up — together these produce
+// a sequential "wipe" reveal instead of the whole overlay moving as one piece.
+const STRIP_COUNT = 6;
+const STRIP_STAGGER = 0.07;
+const STRIP_DURATION = 0.75;
+const TOTAL_EXIT_MS = Math.round(((STRIP_COUNT - 1) * STRIP_STAGGER + STRIP_DURATION) * 1000) + 150;
+
 export default function IntroLoader({ onExitStart, onComplete }: IntroLoaderProps) {
   const [isDone, setIsDone] = useState(false);
 
@@ -14,12 +22,12 @@ export default function IntroLoader({ onExitStart, onComplete }: IntroLoaderProp
     // Trigger completion sequence once the full reveal choreography has played out
     const timer = setTimeout(() => {
       setIsDone(true);
-      // Mount the real page right as the slide-up starts, so it's already
-      // painted underneath instead of a blank gap being revealed first.
+      // Mount the real page right as the strips start sliding, so it's
+      // already painted underneath instead of a blank gap being revealed.
       onExitStart();
       setTimeout(() => {
         onComplete();
-      }, 900); // Wait for the AnimatePresence exit transition to complete
+      }, TOTAL_EXIT_MS); // Wait for every strip's staggered exit to finish
     }, 3500);
 
     return () => {
@@ -34,15 +42,31 @@ export default function IntroLoader({ onExitStart, onComplete }: IntroLoaderProp
       {!isDone && (
         <motion.div
           id="intro-loader-container"
-          className="fixed inset-0 bg-slate-950 z-[999] flex flex-col items-center justify-center overflow-hidden"
-          initial={{ opacity: 1, y: 0 }}
-          exit={{
-            y: "-100%",
-            transition: { duration: 0.9, ease: [0.76, 0, 0.24, 1] },
-          }}
+          className="fixed inset-0 z-[999] flex flex-col items-center justify-center overflow-hidden"
+          initial={false}
+          exit={{}}
         >
+          {/* Curtain background — splits into vertical strips that slide up
+              one after another on exit, instead of the panel moving as one piece */}
+          {Array.from({ length: STRIP_COUNT }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute inset-y-0 bg-slate-950"
+              style={{ left: `${(i * 100) / STRIP_COUNT}%`, width: `${100 / STRIP_COUNT}%` }}
+              initial={{ y: 0 }}
+              exit={{
+                y: "-100%",
+                transition: { duration: STRIP_DURATION, delay: i * STRIP_STAGGER, ease: [0.76, 0, 0.24, 1] },
+              }}
+            />
+          ))}
+
           {/* Premium Logo Container */}
-          <div className="relative z-10 flex flex-col items-center text-center px-4">
+          <motion.div
+            className="relative z-10 flex flex-col items-center text-center px-4"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.4, ease: "easeOut" } }}
+          >
             {/* Elegant Monogram */}
             <motion.div
               id="intro-monogram"
@@ -106,7 +130,7 @@ export default function IntroLoader({ onExitStart, onComplete }: IntroLoaderProp
               animate={{ width: 192, opacity: 1 }}
               transition={{ duration: 1.3, delay: 1.9, ease: [0.16, 1, 0.3, 1] }}
             />
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

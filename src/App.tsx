@@ -162,12 +162,13 @@ function AnimatedRoutes({ onRequestVisit }: { onRequestVisit: () => void }) {
 }
 
 function WhatsAppBubble() {
-  const navigate = useNavigate();
   return (
     <div className="fixed bottom-6 right-6 z-35 flex flex-col gap-3">
-      <button
+      <a
         id="whatsapp-floating-bubble"
-        onClick={() => navigate(paths.contact())}
+        href="https://wa.me/213770403003"
+        target="_blank"
+        rel="noopener noreferrer"
         className="p-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 group cursor-pointer border border-emerald-400"
         title="Parler à un conseiller privé"
         aria-label="Contacter un conseiller privé"
@@ -176,7 +177,7 @@ function WhatsAppBubble() {
         <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 text-[10px] uppercase tracking-widest font-bold font-sans whitespace-nowrap pl-0 group-hover:pl-2">
           Conseiller Privé
         </span>
-      </button>
+      </a>
     </div>
   );
 }

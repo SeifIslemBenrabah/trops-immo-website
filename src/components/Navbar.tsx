@@ -128,11 +128,13 @@ export default function Navbar({ onRequestVisit }: NavbarProps) {
             <div className="hidden lg:flex items-center gap-4">
               <a
                 id="nav-cta-contact-phone"
-                href="tel:+21341294763"
+                href="https://wa.me/213770403003"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`flex items-center gap-1.5 text-xs tracking-wider uppercase font-medium hover:text-accent transition-colors cursor-pointer ${textColorClass}`}
               >
                 <Phone size={14} className="text-accent" aria-hidden="true" />
-                <span>+213 41 29 47 63</span>
+                <span>0770 40 30 03</span>
               </a>
 
               <button

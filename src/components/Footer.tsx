@@ -170,12 +170,12 @@ export default function Footer() {
 
             <div className="flex items-start gap-3 text-sm text-white/70">
               <MapPin size={18} className="text-accent flex-shrink-0 mt-0.5" />
-              <span>Résidence Les Oliviers, Bd de la Soummam, Oran 31000, Algérie</span>
+              <span>Résidence TROPS IMMO, Haï Khmesti, Bir El Djir, Oran 31000, Algérie</span>
             </div>
 
             <div className="flex items-center gap-3 text-sm text-white/70">
               <Phone size={18} className="text-accent flex-shrink-0" />
-              <span>+213 41 29 47 63</span>
+              <span>0770 40 30 03</span>
             </div>
 
             <div className="flex items-center gap-3 text-sm text-white/70">

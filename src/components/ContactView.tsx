@@ -1,15 +1,25 @@
-import { useState, FormEvent } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { paths } from "../lib/paths";
 import { motion, AnimatePresence } from "motion/react";
 import { Phone, Mail, MapPin, Clock, CheckCircle2, Send, AlertCircle } from "lucide-react";
 import Seo from "./Seo";
 
 const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
+const WEB3FORMS_TARGET_FRAME = "web3forms-hidden-frame";
+// Web3Forms redirects the iframe to this URL only on a genuine success; on
+// rejection it renders its own (cross-origin) error page instead. Once the
+// iframe navigates back to our own origin, its contentWindow becomes
+// readable again, which is how we tell success apart from failure below.
+const WEB3FORMS_SUCCESS_MARKER = "wf_sent=1";
 
 export default function ContactView() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const resultFrameRef = useRef<HTMLIFrameElement>(null);
+  // Tracks whether the hidden iframe's next load event is a real submission
+  // response, as opposed to its initial blank-page load on mount.
+  const hasSubmittedRef = useRef(false);
 
   const [generalForm, setGeneralForm] = useState({
     fullName: "",
@@ -18,44 +28,44 @@ export default function ContactView() {
     message: "",
   });
 
-  const handleGeneralSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(false);
-
+  // Submitting is a real <form action="..." target="..."> POST into the
+  // hidden iframe below, not a fetch() call — Web3Forms doesn't return CORS
+  // headers for every origin/plan combination, which silently blocks fetch.
+  // Native form submissions aren't subject to CORS at all, so this works
+  // unconditionally; the iframe keeps it from navigating the whole page away.
+  const handleGeneralSubmit = (e: FormEvent) => {
     if (!WEB3FORMS_ACCESS_KEY) {
+      e.preventDefault();
       console.error(
         "VITE_WEB3FORMS_ACCESS_KEY is not set — the contact form cannot send. See .env.example."
       );
-      setIsSubmitting(false);
       setSubmitError(true);
       return;
     }
+    setSubmitError(false);
+    setIsSubmitting(true);
+    hasSubmittedRef.current = true;
+  };
 
+  const handleResultFrameLoad = () => {
+    if (!hasSubmittedRef.current) return;
+    hasSubmittedRef.current = false;
+    setIsSubmitting(false);
+
+    // Only a successful submission redirects the iframe back to our own
+    // origin, which is the one case where contentWindow.location is
+    // readable here — any Web3Forms-side rejection leaves the iframe on
+    // their (cross-origin) response, throwing instead.
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
-          subject: `TROPS IMMO — Demande générale : ${generalForm.subject}`,
-          from_name: generalForm.fullName,
-          name: generalForm.fullName,
-          email: generalForm.email,
-          message: generalForm.message,
-        }),
-      });
-      const result = await res.json();
-      if (result.success) {
+      const frameUrl = resultFrameRef.current?.contentWindow?.location.href;
+      if (frameUrl && frameUrl.includes(WEB3FORMS_SUCCESS_MARKER)) {
         setSubmitSuccess(true);
-      } else {
-        setSubmitError(true);
+        return;
       }
     } catch {
-      setSubmitError(true);
-    } finally {
-      setIsSubmitting(false);
+      // Still cross-origin — Web3Forms didn't redirect, treat as failure below
     }
+    setSubmitError(true);
   };
 
   const resetForm = () => {
@@ -111,7 +121,7 @@ export default function ContactView() {
                   </div>
                   <div>
                     <h4 className="font-serif-luxury text-sm font-bold text-primary mb-1">Adresse du Siège</h4>
-                    <p className="text-slate-600 text-sm leading-relaxed">Résidence Trops, Boulevard de la Soummam, Oran</p>
+                    <p className="text-slate-600 text-sm leading-relaxed">Résidence TROPS IMMO, Haï Khmesti, Bir El Djir, Oran 31000, Algérie</p>
                   </div>
                 </div>
 
@@ -121,7 +131,7 @@ export default function ContactView() {
                   </div>
                   <div>
                     <h4 className="font-serif-luxury text-sm font-bold text-primary mb-1">Registre Téléphonique</h4>
-                    <p className="text-slate-600 text-sm leading-relaxed">+213 41 29 47 63</p>
+                    <p className="text-slate-600 text-sm leading-relaxed">0770 40 30 03<br />0770 40 30 33</p>
                   </div>
                 </div>
 
@@ -150,7 +160,7 @@ export default function ContactView() {
               <div className="aspect-6/3 border border-slate-200 overflow-hidden">
                 <iframe
                   title="Localisation du siège TROPS IMMO"
-                  src="https://www.google.com/maps?q=Boulevard+de+la+Soummam,+Oran,+Algérie&output=embed"
+                  src="https://www.google.com/maps?q=35.734989166259766,-0.5725911259651184&z=17&output=embed"
                   className="w-full h-full grayscale-[40%] contrast-[1.05]"
                   style={{ border: 0 }}
                   loading="lazy"
@@ -175,13 +185,35 @@ export default function ContactView() {
                     <span className="text-xs uppercase tracking-widest font-semibold text-primary">Demande générale</span>
                   </div>
 
-                  {/* GENERAL CONTACT FORM */}
-                  <form id="contact-general-form" onSubmit={handleGeneralSubmit} className="flex flex-col gap-6">
+                  {/* GENERAL CONTACT FORM — posts directly into a hidden iframe (see
+                      handleGeneralSubmit for why this isn't a fetch() call) */}
+                  <form
+                    id="contact-general-form"
+                    action="https://api.web3forms.com/submit"
+                    method="POST"
+                    target={WEB3FORMS_TARGET_FRAME}
+                    onSubmit={handleGeneralSubmit}
+                    className="flex flex-col gap-6"
+                  >
+                      <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY ?? ""} />
+                      <input
+                        type="hidden"
+                        name="subject"
+                        value={`TROPS IMMO — Demande générale : ${generalForm.subject}`}
+                      />
+                      <input type="hidden" name="from_name" value={generalForm.fullName} />
+                      <input
+                        type="hidden"
+                        name="redirect"
+                        value={`${window.location.origin}${paths.contact()}?${WEB3FORMS_SUCCESS_MARKER}`}
+                      />
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="flex flex-col gap-2">
                           <label htmlFor="general-fullname" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Nom complet</label>
                           <input
                             id="general-fullname"
+                            name="name"
                             type="text"
                             required
                             placeholder="ex. Dr Amina Ghezali"
@@ -194,6 +226,7 @@ export default function ContactView() {
                           <label htmlFor="general-email" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Adresse e-mail</label>
                           <input
                             id="general-email"
+                            name="email"
                             type="email"
                             required
                             placeholder="ex. amina@ghezali.com"
@@ -221,6 +254,7 @@ export default function ContactView() {
                         <label htmlFor="general-message" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Message</label>
                         <textarea
                           id="general-message"
+                          name="message"
                           rows={5}
                           required
                           placeholder="Les détails de votre message..."
@@ -257,6 +291,15 @@ export default function ContactView() {
                         )}
                       </button>
                   </form>
+
+                  <iframe
+                    ref={resultFrameRef}
+                    name={WEB3FORMS_TARGET_FRAME}
+                    title="Résultat de l'envoi du formulaire"
+                    aria-hidden="true"
+                    onLoad={handleResultFrameLoad}
+                    style={{ display: "none" }}
+                  />
                 </motion.div>
               ) : (
                 <motion.div

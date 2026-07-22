@@ -90,7 +90,7 @@ export default function ContactView() {
       <div className="absolute bottom-10 left-0 w-[400px] h-[400px] rounded-none bg-accent/[0.01] blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Page Header */}
         <div className="max-w-3xl mb-16">
           <span className="text-xs uppercase tracking-[0.3em] font-bold text-accent block mb-3">Canaux de Conseil</span>
@@ -160,7 +160,7 @@ export default function ContactView() {
               <div className="aspect-6/3 border border-slate-200 overflow-hidden">
                 <iframe
                   title="Localisation du siège TROPS IMMO"
-                  src="https://www.google.com/maps?q=35.734989166259766,-0.5725911259651184&z=17&output=embed"
+                  src="https://www.google.com/maps?q=35.730757987163926,-0.5832606423277107&z=17&output=embed"
                   className="w-full h-full grayscale-[40%] contrast-[1.05]"
                   style={{ border: 0 }}
                   loading="lazy"
@@ -172,7 +172,7 @@ export default function ContactView() {
 
           {/* RIGHT COLUMN: Contact Form (7 Columns) */}
           <div className="lg:col-span-7 glass border border-white/40 rounded-none p-8 sm:px-12 sm:pt-12 shadow-2xl relative">
-            
+
             <AnimatePresence mode="wait">
               {!submitSuccess ? (
                 <motion.div
@@ -195,101 +195,101 @@ export default function ContactView() {
                     onSubmit={handleGeneralSubmit}
                     className="flex flex-col gap-6"
                   >
-                      <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY ?? ""} />
-                      <input
-                        type="hidden"
-                        name="subject"
-                        value={`TROPS IMMO — Demande générale : ${generalForm.subject}`}
-                      />
-                      <input type="hidden" name="from_name" value={generalForm.fullName} />
-                      <input
-                        type="hidden"
-                        name="redirect"
-                        value={`${window.location.origin}${paths.contact()}?${WEB3FORMS_SUCCESS_MARKER}`}
-                      />
+                    <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY ?? ""} />
+                    <input
+                      type="hidden"
+                      name="subject"
+                      value={`TROPS IMMO — Demande générale : ${generalForm.subject}`}
+                    />
+                    <input type="hidden" name="from_name" value={generalForm.fullName} />
+                    <input
+                      type="hidden"
+                      name="redirect"
+                      value={`${window.location.origin}${paths.contact()}?${WEB3FORMS_SUCCESS_MARKER}`}
+                    />
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div className="flex flex-col gap-2">
-                          <label htmlFor="general-fullname" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Nom complet</label>
-                          <input
-                            id="general-fullname"
-                            name="name"
-                            type="text"
-                            required
-                            placeholder="ex. Dr Amina Ghezali"
-                            value={generalForm.fullName}
-                            onChange={(e) => setGeneralForm({ ...generalForm, fullName: e.target.value })}
-                            className="px-4 py-3 bg-white/50 border border-slate-200/60 rounded-none text-sm focus:outline-none focus:border-accent focus:bg-white transition-all text-primary font-medium"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <label htmlFor="general-email" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Adresse e-mail</label>
-                          <input
-                            id="general-email"
-                            name="email"
-                            type="email"
-                            required
-                            placeholder="ex. amina@ghezali.com"
-                            value={generalForm.email}
-                            onChange={(e) => setGeneralForm({ ...generalForm, email: e.target.value })}
-                            className="px-4 py-3 bg-white/50 border border-slate-200/60 rounded-none text-sm focus:outline-none focus:border-accent focus:bg-white transition-all text-primary font-medium"
-                          />
-                        </div>
-                      </div>
-
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-2">
-                        <label htmlFor="general-subject" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Sujet</label>
+                        <label htmlFor="general-fullname" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Nom complet</label>
                         <input
-                          id="general-subject"
+                          id="general-fullname"
+                          name="name"
                           type="text"
                           required
-                          placeholder="Quel est l'objet de votre demande ?"
-                          value={generalForm.subject}
-                          onChange={(e) => setGeneralForm({ ...generalForm, subject: e.target.value })}
+                          placeholder="ex. Dr Amina Ghezali"
+                          value={generalForm.fullName}
+                          onChange={(e) => setGeneralForm({ ...generalForm, fullName: e.target.value })}
                           className="px-4 py-3 bg-white/50 border border-slate-200/60 rounded-none text-sm focus:outline-none focus:border-accent focus:bg-white transition-all text-primary font-medium"
                         />
                       </div>
-
                       <div className="flex flex-col gap-2">
-                        <label htmlFor="general-message" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Message</label>
-                        <textarea
-                          id="general-message"
-                          name="message"
-                          rows={5}
+                        <label htmlFor="general-email" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Adresse e-mail</label>
+                        <input
+                          id="general-email"
+                          name="email"
+                          type="email"
                           required
-                          placeholder="Les détails de votre message..."
-                          value={generalForm.message}
-                          onChange={(e) => setGeneralForm({ ...generalForm, message: e.target.value })}
+                          placeholder="ex. amina@ghezali.com"
+                          value={generalForm.email}
+                          onChange={(e) => setGeneralForm({ ...generalForm, email: e.target.value })}
                           className="px-4 py-3 bg-white/50 border border-slate-200/60 rounded-none text-sm focus:outline-none focus:border-accent focus:bg-white transition-all text-primary font-medium"
                         />
                       </div>
+                    </div>
 
-                      {submitError && (
-                        <div
-                          role="alert"
-                          className="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-none"
-                        >
-                          <AlertCircle size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
-                          <span>
-                            Une erreur est survenue lors de l'envoi de votre message. Merci de réessayer, ou de nous contacter directement par téléphone ou e-mail.
-                          </span>
-                        </div>
-                      )}
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="general-subject" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Sujet</label>
+                      <input
+                        id="general-subject"
+                        type="text"
+                        required
+                        placeholder="Quel est l'objet de votre demande ?"
+                        value={generalForm.subject}
+                        onChange={(e) => setGeneralForm({ ...generalForm, subject: e.target.value })}
+                        className="px-4 py-3 bg-white/50 border border-slate-200/60 rounded-none text-sm focus:outline-none focus:border-accent focus:bg-white transition-all text-primary font-medium"
+                      />
+                    </div>
 
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full py-4 gold-gradient text-white border border-white/20 rounded-none text-xs uppercase tracking-widest font-semibold shadow-md transition-all flex items-center justify-center mt-1 gap-2 group cursor-pointer disabled:opacity-50 hover:opacity-95"
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="general-message" className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Message</label>
+                      <textarea
+                        id="general-message"
+                        name="message"
+                        rows={5}
+                        required
+                        placeholder="Les détails de votre message..."
+                        value={generalForm.message}
+                        onChange={(e) => setGeneralForm({ ...generalForm, message: e.target.value })}
+                        className="px-4 py-3 bg-white/50 border border-slate-200/60 rounded-none text-sm focus:outline-none focus:border-accent focus:bg-white transition-all text-primary font-medium"
+                      />
+                    </div>
+
+                    {submitError && (
+                      <div
+                        role="alert"
+                        className="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-none"
                       >
-                        {isSubmitting ? (
-                          <span>Envoi en cours...</span>
-                        ) : (
-                          <>
-                            <span>Envoyer le message</span>
-                            <Send size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-                          </>
-                        )}
-                      </button>
+                        <AlertCircle size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
+                        <span>
+                          Une erreur est survenue lors de l'envoi de votre message. Merci de réessayer, ou de nous contacter directement par téléphone ou e-mail.
+                        </span>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full py-4 gold-gradient text-white border border-white/20 rounded-none text-xs uppercase tracking-widest font-semibold shadow-md transition-all flex items-center justify-center mt-1 gap-2 group cursor-pointer disabled:opacity-50 hover:opacity-95"
+                    >
+                      {isSubmitting ? (
+                        <span>Envoi en cours...</span>
+                      ) : (
+                        <>
+                          <span>Envoyer le message</span>
+                          <Send size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                        </>
+                      )}
+                    </button>
                   </form>
 
                   <iframe
@@ -313,12 +313,12 @@ export default function ContactView() {
                   <div className="w-16 h-16 bg-emerald-50 border border-emerald-150 rounded-none flex items-center justify-center text-emerald-500 mb-6 shadow-sm">
                     <CheckCircle2 size={32} className="stroke-[2]" aria-hidden="true" />
                   </div>
-                  
+
                   <span className="text-xs uppercase tracking-[0.3em] text-accent font-bold block mb-2">Soumission Réussie</span>
                   <h3 className="font-serif-luxury text-2xl sm:text-3xl text-primary font-medium mb-4">
                     Votre demande a bien été reçue
                   </h3>
-                  
+
                   <p className="text-slate-500 text-sm font-sans max-w-md mb-8 leading-relaxed">
                     Un conseiller privé de TROPS IMMO a été affecté à votre demande. Nous vous contacterons par e-mail ou par téléphone sous deux heures pour planifier les détails.
                   </p>
